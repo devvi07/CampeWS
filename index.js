@@ -1,41 +1,32 @@
+require("dotenv").config();
 const express = require("express");
-const mongoose = require("mongoose");
 const cors = require("cors");
+const connectDB = require("./config/db");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors()); // habilita CORS
-app.use(express.json()); // parsea JSON
+connectDB();
 
-// 🔗 Conexión a MongoDB Atlas 
-const mongoURI = "mongodb+srv://Campe:Campe2025@campe.1gfbkzs.mongodb.net/?retryWrites=true&w=majority&appName=Campe";
+app.use(cors());
+app.use(express.json());
 
-mongoose.connect(mongoURI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log("✅ Conectado a MongoDB Atlas"))
-.catch(err => console.error("❌ Error conectando a MongoDB:", err));
+const rutasTipoUsuario = require("./routes/tipoUsuario");
+const rutasArticulo = require("./routes/tipoArticulo");
+const rutasUsuarios = require("./routes/usuarios");
+const rutasFacturas = require("./routes/facturas");
+const rutasPagos = require("./routes/pago");
+const rutasCatArticulos = require("./routes/catArticulos");
+const rutasArticulos = require("./routes/articulos");
 
-// 🎯 Modelo de ejemplo
-const SaludoSchema = new mongoose.Schema({ mensaje: String });
-const Saludo = mongoose.model("Saludo", SaludoSchema);
+app.use("/api/tipoUsuario", rutasTipoUsuario);
+app.use("/api/tipoArticulo", rutasArticulo);
+app.use("/api/usuario", rutasUsuarios);
+app.use("/api/facturas", rutasFacturas);
+app.use("/api/pagos", rutasPagos);
+app.use("/api/catArticulos", rutasCatArticulos);
+app.use("/api/articulos", rutasArticulos);
 
-// 📡 Rutas
-app.get("/api/saludo", async (req, res) => {
-  const saludos = await Saludo.find();
-  res.json(saludos);
-});
-
-app.post("/api/saludo", async (req, res) => {
-  const nuevo = new Saludo({ mensaje: req.body.mensaje });
-  await nuevo.save();
-  res.status(201).json(nuevo);
-});
-
-// 🚀 Arrancar el servidor
 app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
 });
- 
