@@ -5,12 +5,14 @@ const usuarioSchema = new Schema({
   nombre: String,
   apellidoP: String,
   apellidoM: String,
-  email: { type: String, unique: true },
+  direccion: String,
+  municipio: String,
   tel: String,
   password: String,
   latitud: Number,
   longitud: Number,
-  dia: Number,
+  dia: String,
+  foto:String,
   tipoUsuario: { type: Schema.Types.ObjectId, ref: 'TipoUsuario' }
 }, { timestamps: true });
 
