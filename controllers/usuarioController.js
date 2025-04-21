@@ -1,8 +1,14 @@
+const bcrypt = require('bcrypt');
 const Usuario = require("../models/Usuario");
 
 exports.obtenerUsuarios = async (req, res) => {
-  const usuarios = await Usuario.find().populate('tipoUsuario');;
+  const usuarios = await Usuario.find().populate('tipoUsuario').populate({
+    path: 'facturas',
+    populate: { path: 'pagos' }
+  });
+
   res.json(usuarios);
+
 };
 
 exports.obtenerUsuario = async (req, res) => {
@@ -16,6 +22,42 @@ exports.obtenerUsuario = async (req, res) => {
 };
 
 exports.crearUsuario = async (req, res) => {
+
+  /*const { 
+    nombre,  
+    apellidoP, 
+    apellidoM, 
+    direccion, 
+    municipio,
+    tel,
+    password, 
+    latitud,
+    longitud,
+    dia,
+    foto,
+    tipoUsuario,
+    facturas
+  } = req.body;
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  // Creamos el usuario con el password hasheado
+  const nuevo = new Usuario({
+    nombre,  
+    apellidoP, 
+    apellidoM, 
+    direccion, 
+    municipio,
+    tel,
+    password: hashedPassword,
+    latitud,
+    longitud,
+    dia,
+    foto,
+    tipoUsuario,
+    facturas
+  });*/
+
   const nuevo = new Usuario(req.body);
   await nuevo.save();
   res.status(201).json(nuevo);
@@ -39,4 +81,27 @@ exports.eliminarUsuario = async (req, res) => {
   } catch {
     res.status(400).json({ error: "ID inválido" });
   }
+};
+
+exports.login = async (req, res) => {
+  const { nombre, password } = req.body;
+
+  const usuario = await Usuario.findOne({ nombre: nombre });
+
+  if (!usuario) {
+    return res.status(401).json({ mensaje: '¡Usuario inexistente!' });
+  }
+
+  /*const passwordOk = await bcrypt.compare(password, usuario.password);
+
+  if (!passwordOk) {
+    return res.status(401).json({ mensaje: 'Contraseña incorrecta' });
+  }*/
+  const pass = await Usuario.findOne({ password:password });
+
+  if (!pass) {
+    return res.status(401).json({ mensaje: '¡Contraseña incorrecta!' });
+  }
+
+  res.json({ mensaje: 'Login exitoso', usuario });
 };

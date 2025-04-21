@@ -1,7 +1,7 @@
 const Factura = require("../models/Factura");
 
 exports.getFacturas = async (req, res) => {
-  const facturas = await Factura.find().populate('usuario').populate('pagos');
+  const facturas = await Factura.find().populate('pagos');
   res.json(facturas);
 };
 
@@ -13,7 +13,7 @@ exports.crearFactura = async (req, res) => {
 
 exports.getFacturasById = async (req, res) => {
   try {
-    const factura = await Factura.findById(req.params.id);
+    const factura = await Factura.findById(req.params.id).populate('pagos');
     if (!factura) return res.status(404).json({ mensaje: "No encontrado" });
     res.json(factura);
   } catch {

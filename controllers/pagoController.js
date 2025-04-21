@@ -1,7 +1,7 @@
 const Pagos = require("../models/Pago");
 
 exports.getPagos = async (req, res) => {
-  const pago = await Pagos.find().populate('factura');
+  const pago = await Pagos.find();
   res.json(pago);
 };
 

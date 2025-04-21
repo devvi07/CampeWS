@@ -13,7 +13,8 @@ const usuarioSchema = new Schema({
   longitud: Number,
   dia: String,
   foto:String,
-  tipoUsuario: { type: Schema.Types.ObjectId, ref: 'TipoUsuario' }
+  tipoUsuario: { type: Schema.Types.ObjectId, ref: 'TipoUsuario' },
+  facturas: [{ type: Schema.Types.ObjectId, ref: 'Factura' }]
 }, { timestamps: true });
 
 module.exports = mongoose.model('Usuario', usuarioSchema);
