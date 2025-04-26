@@ -48,7 +48,8 @@ exports.eliminarUsuario = async (req, res) => {
 exports.login = async (req, res) => {
   const { nombre, password } = req.body;
 
-  const usuario = await Usuario.findOne({ nombre: nombre });
+  //const usuario = await Usuario.findOne({ nombre: nombre });
+  const usuario = await Usuario.findOne({ nombre: nombre }).populate('tipoUsuario');
 
   if (!usuario) {
     return res.status(401).json({ mensaje: '¡Usuario inexistente!' });
