@@ -1,14 +1,16 @@
 const bcrypt = require('bcrypt');
 const Usuario = require("../models/Usuario");
 
-/*exports.obtenerUsuarios = async (req, res) => {
-  const usuarios = await Usuario.find().populate('tipoUsuario').populate({
-    path: 'facturas',
-    populate: { path: 'pagos' }
-  });
-
-  res.json(usuarios);
-};*/
+exports.obtenerClientes = async (req, res) => {
+  try {
+    console.log('mI PUTITO SERVICE: ',req.params.id);
+    const usuario = await Usuario.find({ tipoUsuario: req.params.id }).select('nombre apellidoP apellidoM municipio');
+    if (!usuario) return res.status(404).json({ mensaje: "No encontrado 2" });
+    res.json(usuario);
+  } catch {
+    res.status(400).json({ error: "ID inválido getClientes" });
+  }
+};
 
 exports.obtenerUsuarios = async (req, res) => {
   try {
@@ -36,7 +38,7 @@ exports.obtenerUsuarios = async (req, res) => {
 exports.obtenerUsuario = async (req, res) => {
   try {
     const usuario = await Usuario.findById(req.params.id);
-    if (!usuario) return res.status(404).json({ mensaje: "No encontrado" });
+    if (!usuario) return res.status(404).json({ mensaje: "No encontrado 1" });
     res.json(usuario);
   } catch {
     res.status(400).json({ error: "ID inválido" });
