@@ -1,12 +1,36 @@
 const bcrypt = require('bcrypt');
 const Usuario = require("../models/Usuario");
 
-exports.obtenerUsuarios = async (req, res) => {
+/*exports.obtenerUsuarios = async (req, res) => {
   const usuarios = await Usuario.find().populate('tipoUsuario').populate({
     path: 'facturas',
     populate: { path: 'pagos' }
   });
+
   res.json(usuarios);
+};*/
+
+exports.obtenerUsuarios = async (req, res) => {
+  try {
+    const { municipio, tipoUsuario } = req.query;
+
+    const filtro = {};
+
+    if (municipio) filtro.municipio = municipio;
+    if (tipoUsuario) filtro.tipoUsuario = tipoUsuario;
+
+    const usuarios = await Usuario.find(filtro)
+      .populate('tipoUsuario')
+      .populate({
+        path: 'facturas',
+        populate: { path: 'pagos' }
+      });
+
+    res.json(usuarios);
+  } catch (error) {
+    console.error('Error al obtener usuarios:', error);
+    res.status(500).json({ error: 'Error al obtener usuarios' });
+  }
 };
 
 exports.obtenerUsuario = async (req, res) => {
