@@ -11,6 +11,31 @@ exports.obtenerClientes = async (req, res) => {
   }
 };
 
+exports.obtenerClientesByCobrador = async (req, res) => {
+  try {
+    console.log('Service de cobradores ');
+    const { ruta, cobrador } = req.query;
+    console.log('ruta ',ruta);
+    console.log('cobrador ',cobrador);
+    const filtro = {};
+
+    if (ruta) filtro.ruta = ruta;
+    if (cobrador) filtro.cobrador = cobrador;
+
+    const usuarios = await Usuario.find(filtro)
+      .populate('tipoUsuario')
+      .populate({
+        path: 'facturas',
+        populate: { path: 'pagos' }
+      });
+
+    res.json(usuarios);
+  } catch (error) {
+    console.error('Error al obtener usuarios:', error);
+    res.status(500).json({ error: 'Error al obtener usuarios' });
+  }
+};
+
 exports.obtenerUsuarios = async (req, res) => {
   try {
     const { municipio, tipoUsuario } = req.query;
@@ -37,7 +62,7 @@ exports.obtenerUsuarios = async (req, res) => {
 exports.obtenerUsuario = async (req, res) => {
   try {
     const usuario = await Usuario.findById(req.params.id);
-    if (!usuario) return res.status(404).json({ mensaje: "No encontrado" });
+    if (!usuario) return res.status(404).json({ mensaje: "No encontrado 1" });
     res.json(usuario);
   } catch {
     res.status(400).json({ error: "ID inválido" });
