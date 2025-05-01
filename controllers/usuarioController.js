@@ -3,9 +3,8 @@ const Usuario = require("../models/Usuario");
 
 exports.obtenerClientes = async (req, res) => {
   try {
-    console.log('mI PUTITO SERVICE: ',req.params.id);
     const usuario = await Usuario.find({ tipoUsuario: req.params.id }).select('nombre apellidoP apellidoM direccion municipio facturas');
-    if (!usuario) return res.status(404).json({ mensaje: "No encontrado 2" });
+    if (!usuario) return res.status(404).json({ mensaje: "No encontrado" });
     res.json(usuario);
   } catch {
     res.status(400).json({ error: "ID inválido getClientes" });
@@ -38,7 +37,7 @@ exports.obtenerUsuarios = async (req, res) => {
 exports.obtenerUsuario = async (req, res) => {
   try {
     const usuario = await Usuario.findById(req.params.id);
-    if (!usuario) return res.status(404).json({ mensaje: "No encontrado 1" });
+    if (!usuario) return res.status(404).json({ mensaje: "No encontrado" });
     res.json(usuario);
   } catch {
     res.status(400).json({ error: "ID inválido" });

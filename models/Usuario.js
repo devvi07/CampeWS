@@ -11,7 +11,8 @@ const usuarioSchema = new Schema({
   password: String,
   latitud: Number,
   longitud: Number,
-  dia: String,
+  cobrador: String,
+  ruta: String,
   foto:String,
   tipoUsuario: { type: Schema.Types.ObjectId, ref: 'TipoUsuario' },
   facturas: [{ type: Schema.Types.ObjectId, ref: 'Factura' }]
