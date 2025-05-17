@@ -3,7 +3,7 @@ const Usuario = require("../models/Usuario");
 
 exports.obtenerClientes = async (req, res) => {
   try {
-    const usuario = await Usuario.find({ tipoUsuario: req.params.id }).select('nombre apellidoP apellidoM direccion municipio facturas');
+    const usuario = await Usuario.find({ tipoUsuario: req.params.id }).select('nombre apellidoP apellidoM direccion municipio facturas cobrador ruta foto tel');
     if (!usuario) return res.status(404).json({ mensaje: "No encontrado" });
     res.json(usuario);
   } catch {
